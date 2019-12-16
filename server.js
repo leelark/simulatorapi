@@ -4,46 +4,52 @@ var bodyParser = require('body-parser');
 let fs = require('fs');
 // configure app to use bodyParser()
 // this will let us get the data from a POST
-
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 var port = process.env.PORT || 8000;        // set our port
 
 // ROUTES FOR OUR API
 // =============================================================================
-         // get an instance of the express
+var router = express.Router();              // get an instance of the express
 											// Router
 
-
-
-
-
-
-var http = require('http');
-
-//Node function called each time our event loop receives a new HTTP request
-function onRequest(req, res){
-    res.writeHead(200, {'Content-Type':'text/plain'});
-    var response = fs.readFileSync('stations.json');
-
-try {
-  var data = JSON.parse(fileContents);
-  res.json(data);
-} catch(err) {
-  console.error(err)
-}
-
+// test route to make sure everything is working (accessed at GET
+// http://localhost:8000/api)
+router.get('/stations/data/:station_id', function(req, res) {
+	const id = req.params.station_id;
+	fs.readFile('./stations.json', (err, data) => {
+    if (err) throw err;
+	let sensors = JSON.parse(data);
+	var station_sensor = sensors[id];
+	if(station_sensor != null || station_sensor!=undefined){
+		res.json(station_sensor); 
+	}
+	else{
+		res.json({"No data for station" : id})
+	}	
+	});
 	
-    
-    /* Write the IP addresses of our connecting client to console */
-    console.log('Incoming connection from ' + req.connection.remoteAddress);
-}
+});
 
-//Listen for connections on the port provided to us by the host process
-var server = http.createServer(onRequest).listen(process.env.PORT);
+router.get('/stations/data/', function(req, res) {
+	const id = req.params.id;
+	fs.readFile('./stations.json', (err, data) => {
+    if (err) throw err;
+	let student = JSON.parse(data);
+	res.json(student); 
+	});
+	
+});
 
+// more routes for our API will happen here
 
+// REGISTER OUR ROUTES -------------------------------
+// all of our routes will be prefixed with /api
+app.use('/api', router);
 
-
-
-
+// START THE SERVER
+// =============================================================================
+app.listen(port , '0.0.0.0');
+console.log('Server running on port ' + port);
 
