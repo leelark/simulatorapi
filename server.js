@@ -23,11 +23,11 @@ var http = require('http');
 //Node function called each time our event loop receives a new HTTP request
 function onRequest(req, res){
     res.writeHead(200, {'Content-Type':'text/plain'});
-    var response = fs.readFileSync('stations.json', 'utf8');
+    var response = fs.readFileSync('stations.json');
 
 try {
-  const data = JSON.parse(fileContents);
-  res.json(response);
+  var data = JSON.parse(fileContents);
+  res.json(data);
 } catch(err) {
   console.error(err)
 }
