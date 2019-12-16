@@ -11,7 +11,7 @@ var port = process.env.PORT || 8000;        // set our port
 
 // ROUTES FOR OUR API
 // =============================================================================
-var router = express.Router();              // get an instance of the express
+         // get an instance of the express
 											// Router
 
 
@@ -24,12 +24,9 @@ var http = require('http');
 //Node function called each time our event loop receives a new HTTP request
 function onRequest(req, res){
     res.writeHead(200, {'Content-Type':'text/plain'});
-    const id = req.params.id;
-	fs.readFile('./stations.json', (err, data) => {
-    if (err) throw err;
-	let student = JSON.parse(data);
-	res.json(student); 
-	});
+    
+	res.end('student'); 
+	
     
     /* Write the IP addresses of our connecting client to console */
     console.log('Incoming connection from ' + req.connection.remoteAddress);
