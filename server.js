@@ -4,8 +4,7 @@ var bodyParser = require('body-parser');
 let fs = require('fs');
 // configure app to use bodyParser()
 // this will let us get the data from a POST
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+
 
 var port = process.env.PORT || 8000;        // set our port
 
@@ -24,8 +23,15 @@ var http = require('http');
 //Node function called each time our event loop receives a new HTTP request
 function onRequest(req, res){
     res.writeHead(200, {'Content-Type':'text/plain'});
-    
-	res.end('student'); 
+    var response = fs.readFileSync('./stations.json', 'utf8');
+
+try {
+  const data = JSON.parse(fileContents);
+  res.json(response);
+} catch(err) {
+  console.error(err)
+}
+
 	
     
     /* Write the IP addresses of our connecting client to console */
